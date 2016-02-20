@@ -84,7 +84,12 @@ class Most_Voted
 					while($row = $this->sql_result->fetch_assoc())
 					{
 						//echo $row['title']."</br>";
-						$this->arr_result[$i++] = $row;
+						if($row['deleted_actions'] === NULL && $row['deleted_votes'] === NULL)
+						{
+							$this->arr_result[$i++] = $row;
+							//echo "ya"."<br>";
+						}
+						
 					}
 					
 				}
@@ -109,6 +114,7 @@ class Most_Voted
 					
 					for($x = 0; $x < $num; $x++)
 					{
+						
 						echo $this->arr_result[$x]['title']."</br>";
 					}
 					 	
@@ -135,7 +141,7 @@ class Most_Voted
 
 $t = new Most_Voted('localhost','root','kenny','finitivedb');
 
-$query = 'SELECT a.title AS title, b.actions_id as id,
+$query = 'SELECT a.title AS title, a.deleted_at AS deleted_actions,b.actions_id as id,b.deleted_at AS deleted_votes,
 count(id) as total_votes
 FROM actions a inner join votes b
 on a.id = b.actions_id
